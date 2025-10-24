@@ -1,11 +1,9 @@
-import { Text, View, StyleSheet } from 'react-native';
-import NavigationMenu from '@/components/NavigationMenu';
+import { StyleSheet, Text, View } from 'react-native';
 
-export default function AboutScreen() {
+export default function GPSScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>About screen</Text>
-      <NavigationMenu />
+      <Text style={styles.text}>GPS Data</Text>
     </View>
   );
 }

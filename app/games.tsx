@@ -1,10 +1,10 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import NavigationMenu from '@/components/NavigationMenu';
 
-export default function AboutScreen() {
+export default function GamesScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>About screen</Text>
+      <Text style={styles.text}>Games</Text>
       <NavigationMenu />
     </View>
   );
