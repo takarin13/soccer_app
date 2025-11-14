@@ -1,72 +1,105 @@
 import { useRouter } from 'expo-router';
-import React, { useState } from "react";
+import React from "react";
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Checkbox, List, SegmentedButtons } from 'react-native-paper';
 
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-//import { Button, Checkbox, Form, Input } from 'antd';
+type Position = 'forward' | 'midfield' | 'defender' | 'goalkeeper';
+
+interface Player {
+  id: string;
+  name: string;
+}
+
+const SAMPLE_PLAYERS: Player[] = [
+  { id: '1', name: 'John Smith' },
+  { id: '2', name: 'Mike Johnson' },
+  { id: '3', name: 'David Williams' },
+  { id: '4', name: 'Chris Brown' },
+  { id: '5', name: 'Alex Davis' },
+  { id: '6', name: 'Ryan Miller' },
+  { id: '7', name: 'Jordan Wilson' },
+  { id: '8', name: 'Sam Taylor' },
+  { id: '9', name: 'Jamie Anderson' },
+  { id: '10', name: 'Casey Martinez' },
+];
 
 export default function HomeScreen() {
+  const [selectedPosition, setSelectedPosition] = React.useState<Position>('forward');
+  const [selectedPlayers, setSelectedPlayers] = React.useState<Set<string>>(new Set());
+
+  // Notes:
+
+  console.log('Players selected:', selectedPlayers);
+  console.log('Position selected:', selectedPosition);
   const router = useRouter();
 
   const handleNavigation = (route: string) => {
     router.push(route as any);
   };
 
-  const onFinish = values => {
-  console.log('Success:', values);
-};
-const onFinishFailed = errorInfo => {
-  console.log('Failed:', errorInfo);
-};
+  const togglePlayer = (playerId: string) => {
+    setSelectedPlayers(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(playerId)) {
+        newSet.delete(playerId);
+      } else {
+        newSet.add(playerId);
+      }
+      return newSet;
+    });
+  };
 
-  const App = () => (
-  <Form
-    name="basic"
-    labelCol={{ span: 8 }}
-    wrapperCol={{ span: 16 }}
-    style={{ maxWidth: 600 }}
-    initialValues={{ remember: true }}
-    onFinish={onFinish}
-    onFinishFailed={onFinishFailed}
-    autoComplete="off"
-  >
-    <Form.Item
-      label="Username"
-      name="username"
-      rules={[{ required: true, message: 'Please input your username!' }]}
-    >
-      <Input />
-    </Form.Item>
-
-    <Form.Item
-      label="Password"
-      name="password"
-      rules={[{ required: true, message: 'Please input your password!' }]}
-    >
-      <Input.Password />
-    </Form.Item>
-
-    <Form.Item name="remember" valuePropName="checked" label={null}>
-      <Checkbox>Remember me</Checkbox>
-    </Form.Item>
-
-    <Form.Item label={null}>
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
-    </Form.Item>
-  </Form>
-  )
+  const handleNext = () => {
+    // Store the selected position and players
+    console.log('Selected Position:', selectedPosition);
+    console.log('Selected Players:', Array.from(selectedPlayers));
+    // Navigate to next screen
+    handleNavigation('/games');
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
+      <View style={styles.header}>
+        <SegmentedButtons
+          value={selectedPosition}
+          onValueChange={(value) => setSelectedPosition(value as Position)}
+          buttons={[
+            { value: 'forward', label: 'Forward' },
+            { value: 'midfield', label: 'Midfield' },
+            { value: 'defender', label: 'Defender' },
+            { value: 'goalkeeper', label: 'Goalkeeper' },
+          ]}
+          style={styles.segmentedButtons}
+        />
+      </View>
 
-      <Pressable
-        style={styles.button}
-        onPress={() => handleNavigation('/games')}
-      >
-        <Text style={styles.buttonText}>next</Text>
-      </Pressable>
+      <ScrollView style={styles.playerList} contentContainerStyle={styles.playerListContent}>
+        {SAMPLE_PLAYERS.map((player) => (
+          <List.Item
+            key={player.id}
+            title={player.name}
+            left={() => (
+              <Checkbox
+                status={selectedPlayers.has(player.id) ? 'checked' : 'unchecked'}
+                onPress={() => togglePlayer(player.id)}
+              />
+            )}
+            style={styles.listItem}
+            titleStyle={styles.playerName}
+          />
+        ))}
+      </ScrollView>
+
+      <View style={styles.footer}>
+        <Button
+          mode="contained"
+          onPress={handleNext}
+          style={styles.nextButton}
+          contentStyle={styles.nextButtonContent}
+        >
+          Next
+        </Button>
+      </View>
     </View>
   );
 }
@@ -74,24 +107,43 @@ const onFinishFailed = errorInfo => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 40,
+  header: {
+    padding: 16,
+    paddingTop: 20,
+    backgroundColor: '#f5f5f5',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
   },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    borderRadius: 10,
+  segmentedButtons: {
+    marginVertical: 8,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
+  playerList: {
+    flex: 1,
+  },
+  playerListContent: {
+    paddingVertical: 8,
+  },
+  listItem: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  playerName: {
+    fontSize: 16,
+  },
+  footer: {
+    padding: 16,
+    paddingBottom: 32,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+  },
+  nextButton: {
+    borderRadius: 8,
+  },
+  nextButtonContent: {
+    paddingVertical: 8,
   },
 });
 
