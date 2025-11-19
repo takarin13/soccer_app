@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button, Checkbox, List, SegmentedButtons, Avatar } from 'react-native-paper';
 
 
-type Position = 'forward' | 'midfield' | 'defender' | 'goalkeeper';
+type Position = 'All' | 'forward' | 'midfield' | 'defender' | 'goalkeeper';
 
 interface Player {
   id: string;
@@ -14,42 +14,42 @@ interface Player {
 }
 
 const SAMPLE_PLAYERS: Player[] = [
-  { id: '0', name: 'Adrian' , position:"goalkeeper"},
-  { id: '1', name: 'Log' , position:"goalkeeper"},
-  { id: '2', name: 'Vids' , position:"defender"},
-  { id: '3', name: 'Conrad' , position:"defender"},
-  { id: '4', name: 'Tyler' , position:"defender"},
-  { id: '5', name: 'Beni' , position:"defender"},
-  { id: '6', name: 'Louis', position:"midfieald" },
-  { id: '7', name: 'Miller' , position:"forward"},
-  { id: '8', name: 'Jack', position:"midfieald" },
-  { id: '9', name: 'Brede' , position:"forward"},
-  { id: '10', name: 'Woody', position:"midfieald" },
-  { id: '11', name: 'Arnord' , position:"forward"},
-  { id: '12', name: 'Xav A' , position:"midfieald"},
-  { id: '13', name: 'Rinta', position:"midfieald" },
-  { id: '14', name: 'Aysa' , position:"forward"},
-  { id: '15', name: 'Sam' , position:"forward"},
-  { id: '16', name: 'Ling' , position:"defender"},
-  { id: '17', name: 'Nathan' , position:"defender"},
-  { id: '18', name: 'Xav C' , position:"defender"},
-  { id: '19', name: 'Hunter' , position:"defender"},
+  { id: '0', name: 'Adrian' , position:"goalkeeper", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FAdrian_Najarro_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '1', name: 'Log' , position:"goalkeeper", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FLogi_Hjalested_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '2', name: 'Vids' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FVidar_Ragnarsson_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '3', name: 'Conrad' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FConrad_Eriksson_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '4', name: 'Tyler' , position:"defender", img_url: "https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FTyler_Leonard_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '5', name: 'Beni' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FBenian_Yao_2025_Headshot.jpg&width=100&height=100&type=webp"},
+  { id: '6', name: 'Louis', position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FLouis_Beckett_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '7', name: 'Miller' , position:"forward", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FMiller_Hayden_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '8', name: 'Jack', position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FJack_Steel_2025_Headshot.jpg&width=100&height=100&type=webp"},
+  { id: '9', name: 'Brede' , position:"forward", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FBrede_Fiksdal_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '10', name: 'Woody', position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FCharlie_Wood_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '11', name: 'Arnord' , position:"forward", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FArnor_Hardarson_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '12', name: 'Xav A' , position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FXavier_Alcantar_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '13', name: 'Rinta', position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FRinta_Takagi_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '14', name: 'Aysa' , position:"forward", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FAysa_Hamid_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '15', name: 'Sam' , position:"forward", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FSam_Howe_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '16', name: 'Ling' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FJoe_Ling_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '17', name: 'Nathan' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FNathan_Montini_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '18', name: 'Xav C' , position:"forword", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FXavier_Carroll_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '19', name: 'Hunter' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FHunter_Wilson_2025_Headshot.png&width=100&height=100&type=webp"},
   { id: '20', name: 'Owen', position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FOwen_Lagerwey_2025_Headshot.png&width=100&height=100&type=webp" },
-  { id: '21', name: 'Lenny' , position:"defender"},
-  { id: '22', name: 'Jaxon', position:"midfieald" },
-  { id: '24', name: 'Poul' , position:"defender"},
-  { id: '27', name: 'David' , position:"defender"},
-  { id: '28', name: 'Dylan K', position:"midfieald" },
-  { id: '29', name: 'Spijkers' , position:"defender"},
-  { id: '30', name: 'Andrew', position:"goalkeeper" },
-  { id: '31', name: 'AJ' , position:"goalkeeper"},
-  { id: '32', name: 'Nico' , position:"midfieald"},
-  { id: '33', name: 'Dylan C', position:"midfieald" },
-  { id: '34', name: 'Edvin', position:"midfieald" },
-  { id: '35', name: 'Eli' , position:"forward"},
-  { id: '36', name: 'Logan' , position:"defender"},
-  { id: '37', name: 'Rodrigo', position:"forward" },
-  { id: '40', name: 'Lucca', position:"goalkeeper" },
+  { id: '21', name: 'Lenny' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FLennart_Granzow_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '22', name: 'Jaxon', position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FJackson_Minneci_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '24', name: 'Poul' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FPaul_Ngoie_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '27', name: 'David' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FDavid_Liboyi_2025_Headshot.jpg&width=100&height=100&type=webp"},
+  { id: '28', name: 'Dylan K', position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FDylan_Kwasnik_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '29', name: 'Spijkers' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FSjoerd_Spijkers_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '30', name: 'Andrew', position:"goalkeeper", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FAndrew_Kohlberg_2025_Headshot.png&width=100&height=100&gravity=north&type=webp"},
+  { id: '31', name: 'AJ' , position:"goalkeeper", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FAJ_Bengds_2025_Headshot.jpg&width=100&height=100&type=webp"},
+  { id: '32', name: 'Nico' , position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FNico_Nava_2025_Headshot.jpg&width=100&height=100&type=webp"},
+  { id: '33', name: 'Dylan C', position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FDylan_Culbertson_2025_Headshot.jpg&width=100&height=100&type=webp"},
+  { id: '34', name: 'Edvin', position:"midfieald", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FEdvin_Grolimund_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '35', name: 'Eli' , position:"forward", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FEli_Berry_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '36', name: 'Logan' , position:"defender", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FLogan_Smith_2025_Headshot.png&width=100&height=100&type=webp"},
+  { id: '37', name: 'Rodrigo', position:"forward", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FRodrigo_Mendes_2025_Headshot.jpg&width=100&height=100&type=webp"},
+  { id: '40', name: 'Lucca', position:"goalkeeper", img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2F2025%2F8%2F5%2FLucca_Barros_2025_Headshot.jpg&width=100&height=100&type=webp"},
 ];
 
 export default function HomeScreen() {
@@ -83,7 +83,7 @@ export default function HomeScreen() {
     console.log('Selected Position:', selectedPosition);
     console.log('Selected Players:', Array.from(selectedPlayers));
     // Navigate to next screen
-    handleNavigation('/games');
+    handleNavigation('/gps-datas');
   };
 
   return (
@@ -93,6 +93,7 @@ export default function HomeScreen() {
           value={selectedPosition}
           onValueChange={(value) => setSelectedPosition(value as Position)}
           buttons={[
+            { value: 'All', label: 'All' },
             { value: 'forward', label: 'Forward' },
             { value: 'midfield', label: 'Midfield' },
             { value: 'defender', label: 'Defender' },
@@ -120,7 +121,7 @@ export default function HomeScreen() {
                 status={selectedPlayers.has(player.id) ? 'checked' : 'unchecked'}
                 onPress={() => togglePlayer(player.id)}
               />
-              <Avatar.Image source={{ uri: player.img_url}} size={60}/>
+              <Avatar.Image source={{ uri: player.img_url}} size={50}/>
               </>
 
             )}
@@ -190,6 +191,7 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     borderRadius: 8,
+    backgroundColor: '#007AFF',
   },
   nextButtonContent: {
     paddingVertical: 8,
