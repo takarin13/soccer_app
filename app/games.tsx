@@ -1,7 +1,8 @@
+import { useAppContext } from '@/context/AppContext';
 import { useRouter } from 'expo-router';
-import React from "react";
+import React, { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Button, Checkbox, List, SegmentedButtons, Avatar } from 'react-native-paper';
+import { Avatar, Button, Checkbox, List, SegmentedButtons } from 'react-native-paper';
 
 
 type Games = 'All' | 'conference' | 'none conference' | 'home' | 'away';
@@ -35,12 +36,18 @@ const SAMPLE_TEAMS: Team[] = [
 export default function HomeScreen() {
   const [selectedGames, setSelectedGames] = React.useState<Games>('conference');
   const [selectedTeams, setSelectedTeams] = React.useState<Set<string>>(new Set());
-
-  // Notes:
-
-  console.log('Teams selected:', selectedTeams);
-  console.log('Games selected:', selectedGames);
+  
+  // Use global context
+  const { setSelectedTeams: setContextTeams } = useAppContext();
   const router = useRouter();
+
+  // Sync local state with context whenever it changes
+  useEffect(() => {
+    setContextTeams(selectedTeams);
+  }, [selectedTeams, setContextTeams]);
+
+  console.log('Selected Games:', selectedGames);
+  console.log('Selected Teams:', Array.from(selectedTeams));
 
   const handleNavigation = (route: string) => {
     router.push(route as any);
@@ -59,12 +66,28 @@ export default function HomeScreen() {
   };
 
   const handleNext = () => {
-    // Store the selected position and players
+    // Store the selected data in context
+    setContextTeams(selectedTeams);
+    
     console.log('Selected Games:', selectedGames);
     console.log('Selected Teams:', Array.from(selectedTeams));
-    // Navigate to next screen
-    handleNavigation('/choose-type');
+    
+    // Navigate to next screen - data is already in context
+    router.push('/choose-type' as any);
   };
+
+  const teamsToDisplay = SAMPLE_TEAMS.filter((team) => {
+    if (selectedGames === 'All') {
+      return true;
+    }
+    if (selectedGames === 'conference') {
+      return team.conference === 'conference';
+    }
+    if (selectedGames === 'none conference') {
+      return team.conference === 'none conference';
+    }
+    return team.home_or_away === selectedGames;
+  });
 
   return (
     <View style={styles.container}>
@@ -84,7 +107,7 @@ export default function HomeScreen() {
       </View>
 
       <ScrollView style={styles.teamList} contentContainerStyle={styles.teamListContent}>
-        {SAMPLE_TEAMS.map((Team) => (
+        {teamsToDisplay.map((Team) => (
           <List.Item
             key={Team.id}
             title={
@@ -102,13 +125,18 @@ export default function HomeScreen() {
                   onPress={() => toggleTeam(Team.id)}
                 />
                 <View style={styles.avatarContainer}>
-                  <Avatar.Image source={{ uri: Team.img_url }} size={60} />
+                  <Avatar.Image 
+                    source={{ uri: Team.img_url }} 
+                    size={60}
+                    style={{ backgroundColor: 'transparent' }}
+                  />
                 </View>
               </View>
 
             )}
             style={styles.listItem}
             titleStyle={styles.teamName}
+            rippleColor="rgba(0, 0, 0, 0.1)"
           />
         ))}
       </ScrollView>
@@ -151,6 +179,7 @@ const styles = StyleSheet.create({
   listItem: {
     paddingHorizontal: 16,
     paddingVertical: 8,
+    backgroundColor: '#fff',
   },
   titleContainer:{
     flex: 1,
@@ -181,6 +210,7 @@ const styles = StyleSheet.create({
   avatarWrapper: {
   flexDirection: 'row',
   alignItems: 'center',
+  backgroundColor: 'transparent',
 },
 avatarContainer: {
   backgroundColor: '#ffffff',   // <-- White background

@@ -1,7 +1,8 @@
+import { useAppContext } from '@/context/AppContext';
 import { useRouter } from 'expo-router';
-import React from "react";
+import React, { useEffect } from "react";
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Button, Checkbox, List, SegmentedButtons, Avatar } from 'react-native-paper';
+import { Avatar, Button, Checkbox, List, SegmentedButtons } from 'react-native-paper';
 
 
 type Position = 'All' | 'forward' | 'midfield' | 'defender' | 'goalkeeper';
@@ -55,12 +56,15 @@ const SAMPLE_PLAYERS: Player[] = [
 export default function HomeScreen() {
   const [selectedPosition, setSelectedPosition] = React.useState<Position>('forward');
   const [selectedPlayers, setSelectedPlayers] = React.useState<Set<string>>(new Set());
-
-  // Notes:
-
-  console.log('Players selected:', selectedPlayers);
-  console.log('Position selected:', selectedPosition);
+  
+  // Use global context
+  const { setSelectedPlayers: setContextPlayers } = useAppContext();
   const router = useRouter();
+
+  // Sync local state with context whenever it changes
+  useEffect(() => {
+    setContextPlayers(selectedPlayers);
+  }, [selectedPlayers, setContextPlayers]);
 
   const handleNavigation = (route: string) => {
     router.push(route as any);
@@ -79,11 +83,14 @@ export default function HomeScreen() {
   };
 
   const handleNext = () => {
-    // Store the selected position and players
+    // Store the selected data in context
+    setContextPlayers(selectedPlayers);
+    
     console.log('Selected Position:', selectedPosition);
     console.log('Selected Players:', Array.from(selectedPlayers));
-    // Navigate to next screen
-    handleNavigation('/gps-datas');
+    
+    // Navigate to next screen - data is already in context
+    router.push('/gps-data' as any);
   };
 
   return (
@@ -121,7 +128,11 @@ export default function HomeScreen() {
                 status={selectedPlayers.has(player.id) ? 'checked' : 'unchecked'}
                 onPress={() => togglePlayer(player.id)}
               />
-              <Avatar.Image source={{ uri: player.img_url}} size={50}/>
+              <Avatar.Image 
+                source={{ uri: player.img_url}} 
+                size={50}
+                style={{ backgroundColor: 'transparent' }}
+              />
               </>
 
             )}
