@@ -1,11 +1,11 @@
 // place to store all global variables:
 import { useAppContext } from '@/context/AppContext';
-import { useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface GpsStats {
-  player_id: string;
-  game_id: string;
+  player_id: number;
+  game_id: number;
   player_name: string;
   game_name: string;
   distance: number;
@@ -14,110 +14,126 @@ interface GpsStats {
   acc: number;
   dec: number;
 }
-
-const SAMPLE_GPS: GpsStats[] = [
-  {player_id: '3', game_id: '1', player_name: 'Conrad', game_name: 'Howard' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '2', player_name: 'Conrad', game_name: 'Georgia State' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '3', player_name: 'Conrad', game_name: 'Queens' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '4', player_name: 'Conrad', game_name: 'Bellamine' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '5', player_name: 'Conrad', game_name: 'Wafford' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '6', player_name: 'Conrad', game_name: 'ETSU' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '7', player_name: 'Conrad', game_name: 'Upstate' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '8', player_name: 'Conrad', game_name: 'California' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '9', player_name: 'Conrad', game_name: 'Radford' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '10', player_name: 'Conrad', game_name: 'Highpoint' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '11', player_name: 'Conrad', game_name: 'Longwood' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '12', player_name: 'Conrad', game_name: 'Presbyterian' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '13', player_name: 'Conrad', game_name: 'furman' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '14', player_name: 'Conrad', game_name: 'Winthrop' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '3', game_id: '15', player_name: 'Conrad', game_name: 'Gardner-Webb' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '1', player_name: 'Woody', game_name: 'Howard' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '2', player_name: 'Woody', game_name: 'Georgia State' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '3', player_name: 'Woody', game_name: 'Queens' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '4', player_name: 'Woody', game_name: 'Bellamine' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '5', player_name: 'Woody', game_name: 'Wafford' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '6', player_name: 'Woody', game_name: 'ETSU' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '7', player_name: 'Woody', game_name: 'Upstate' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '8', player_name: 'Woody', game_name: 'California' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '9', player_name: 'Woody', game_name: 'Radford' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '10', player_name: 'Woody', game_name: 'Highpoint' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '11', player_name: 'Woody', game_name: 'Longwood' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '12', player_name: 'Woody', game_name: 'Presbyterian' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '13', player_name: 'Woody', game_name: 'furman' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '14', player_name: 'Woody', game_name: 'Winthrop' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '10', game_id: '15', player_name: 'Woody', game_name: 'Gardner-Webb' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '1', player_name: 'Rinta', game_name: 'Howard' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '2', player_name: 'Rinta', game_name: 'Georgia State' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '3', player_name: 'Rinta', game_name: 'Queens' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '4', player_name: 'Rinta', game_name: 'Bellamine' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '5', player_name: 'Rinta', game_name: 'Wafford' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '6', player_name: 'Rinta', game_name: 'ETSU' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '7', player_name: 'Rinta', game_name: 'Upstate' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '8', player_name: 'Rinta', game_name: 'California' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '9', player_name: 'Rinta', game_name: 'Radford' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '10', player_name: 'Rinta', game_name: 'Highpoint' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '11', player_name: 'Rinta', game_name: 'Longwood' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '12', player_name: 'Rinta', game_name: 'Presbyterian' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '13', player_name: 'Rinta', game_name: 'furman' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '14', player_name: 'Rinta', game_name: 'Winthrop' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '13', game_id: '15', player_name: 'Rinta', game_name: 'Gardner-Webb' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '1', player_name: 'Rodrigo', game_name: 'Howard' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '2', player_name: 'Rodrigo', game_name: 'Georgia State' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '3', player_name: 'Rodrigo', game_name: 'Queens' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '4', player_name: 'Rodrigo', game_name: 'Bellamine' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '5', player_name: 'Rodrigo', game_name: 'Wafford' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '6', player_name: 'Rodrigo', game_name: 'ETSU' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '7', player_name: 'Rodrigo', game_name: 'Upstate' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '8', player_name: 'Rodrigo', game_name: 'California' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '9', player_name: 'Rodrigo', game_name: 'Radford' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '10', player_name: 'Rodrigo', game_name: 'Highpoint' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '11', player_name: 'Rodrigo', game_name: 'Longwood' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '12', player_name: 'Rodrigo', game_name: 'Presbyterian' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '13', player_name: 'Rodrigo', game_name: 'furman' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '14', player_name: 'Rodrigo', game_name: 'Winthrop' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-  {player_id: '37', game_id: '15', player_name: 'Rodrigo', game_name: 'Gardner-Webb' , distance: 13,  sprint_distance: 800, num_of_sprints: 80, acc: 100, dec: 100},
-];
+const API_URL = 'https://script.google.com/macros/s/AKfycbzwP5Ac7fWHUvNIHGGidUrl1G-f026zeQzTtoVd-cSW5siXKhxP1D072O3jxuA08eUC/exec'
 
 export default function GPSScreen() {
   const [mode, setMode] = useState<"players" | "trend">("players");
+  const [gpsToDisplay, setGpsToDisplay] = useState<GpsStats[]>([]);
+  const [groups, setGroups] = useState<Record<number, any[]>>({});
+
+
   // Access the context to get selected teams and other data
   const { appData, getSelectedTeamsArray, getSelectedPlayersArray } = useAppContext();
 
-  // Get selected teams as an array (easier to work with)
-  const selectedTeamsArray = getSelectedTeamsArray();
+  // Memoize arrays to prevent infinite loops - serialize Sets to detect actual changes
+  // This ensures arrays only recreate when Set contents actually change, not just references
+  const selectedTeamsArray = useMemo(() => {
+    return getSelectedTeamsArray();
+  }, [JSON.stringify([...appData.selectedTeams].sort())]);
   
-  // Or access the Set directly from appData
-  const selectedTeamsSet = appData.selectedTeams;
-  
-  // Also access other data if needed
-  const selectedPlayersArray = getSelectedPlayersArray();
+  const selectedPlayersArray = useMemo(() => {
+    return getSelectedPlayersArray();
+  }, [JSON.stringify([...appData.selectedPlayers].sort())]);
 
-  const gpsToDisplay = useMemo(() => {
-    return SAMPLE_GPS.filter(item =>
-      selectedTeamsArray.includes(item.game_id) &&
-      selectedPlayersArray.includes(item.player_id)
+const getGPSData = async () => {
+
+    // Step 1: Get all GPS data from Spreadsheet
+    const sheetName = 'GPS Data';
+    const response = await fetch(
+        `${API_URL}?sheet=${sheetName}`
     );
-  }, [selectedTeamsArray, selectedPlayersArray]);
+    const data: GpsStats[] = await response.json();
+    console.log(data);
+    console.log('selectedTeamsArray', selectedTeamsArray);
+    console.log('selectedPlayersArray', selectedPlayersArray);
+    
+    // step 2: filter the data to only include the selected teams and players
+    // const gpsData = data.filter(item =>
+    //     [7, 9].includes(item.game_id) &&
+    //     [37, 13].includes(item.player_id)
+    // );
+
+    const gpsData = data.filter(item =>
+        selectedTeamsArray.includes(item.game_id) &&
+        selectedPlayersArray.includes(item.player_id)
+    );
+    
+    setGpsToDisplay(gpsData);
+    // Groups will be recalculated by the useEffect when gpsToDisplay changes
+}
+
+   useEffect(() => {
+    console.log('Getting GPS data!!!!');
+    getGPSData();
+  }, [selectedTeamsArray, selectedPlayersArray]); // Re-run when selections change
+  
+  // Recalculate groups when mode or gpsToDisplay changes
+  useEffect(() => {
+    if (gpsToDisplay.length === 0) return;
+    
+    if (mode === "players") {
+      byGame(gpsToDisplay);
+    } else {
+      byPlayer(gpsToDisplay);
+    }
+  }, [mode, gpsToDisplay]);
 
   // GROUP BY GAME
-  const byGame = useMemo(() => {
-    const groups: Record<string, any[]> = {};
+  const byGame = (gpsToDisplay: GpsStats[]) => {
+    console.log('byGame triggered', gpsToDisplay);
+    const _groups: Record<number, any[]> = {};
     for (const item of gpsToDisplay) {
-      if (!groups[item.game_id]) groups[item.game_id] = [];
-      groups[item.game_id].push(item);
+      if (!_groups[item.game_id]) {
+        _groups[item.game_id] = [];
+      }
+      _groups[item.game_id].push(item);
     }
-    return groups;
-  },  [gpsToDisplay]);
+    console.log('groups', _groups);
+    setGroups(_groups);
+  }
 
-  const byPlayer = useMemo(() => {
-    const groups: Record<string, any[]> = {};
+  const byPlayer = (gpsToDisplay: GpsStats[]) => {
+    console.log('byPlayer triggered', gpsToDisplay);
+    const _groups: Record<number, any[]> = {};
     for (const item of gpsToDisplay) {
-      if (!groups[item.player_id]) groups[item.player_id] = [];
-      groups[item.player_id].push(item);
+      if (!_groups[item.player_id]) {
+        _groups[item.player_id] = [];
+      }
+      _groups[item.player_id].push(item);
     }
-    return groups;
-  }, [gpsToDisplay]);
+    console.log('groups', _groups);
+    setGroups(_groups);
+  }
+  
 
+
+//     for (const item of gpsToDisplay) {
+//       if (!groups[item.game_id]) groups[item.game_id] = [];
+//       groups[item.game_id].push(item);
+//     }
+//   }
+// //   const byGame = useMemo(() => {
+//     console.log('byGame triggered', gpsToDisplay);
+//     const groups: Record<string, any[]> = {};
+//     for (const item of gpsToDisplay) {
+//       if (!groups[item.game_id]) groups[item.game_id] = [];
+//       groups[item.game_id].push(item);
+//     }
+//     return groups;
+//   },  [gpsToDisplay]);
+
+//   const byPlayer = useMemo(() => {
+//     const groups: Record<string, any[]> = {};
+//     for (const item of gpsToDisplay) {
+//       if (!groups[item.player_id]) groups[item.player_id] = [];
+//       groups[item.player_id].push(item);
+//     }
+//     setGroups(groups);
+//     return groups;
+//   }, [gpsToDisplay]);
+
+  console.log('groups', groups);
+  console.log('gpsToDisplay', gpsToDisplay);
   return (
     <View style={styles.container}>
       <Text style={styles.header}>GPS Comparison</Text>
@@ -142,14 +158,16 @@ export default function GPSScreen() {
       <ScrollView>
         {mode === "players" ? (
           // -------- MULTI-PLAYER COMPARISON --------
-          Object.keys(byGame).map(gameId => (
+          Object.keys(groups).map(gameId => {
+            const gameIdNum = Number(gameId);
+            return (
             <View key={gameId} style={styles.gameCard}>
               <Text style={styles.gameTitle}>
-                Game {gameId} – {byGame[gameId][0].game_name}
+                Game {gameId} – {groups[gameIdNum][0].game_name}
               </Text>
 
               <View style={styles.playersRow}>
-                {byGame[gameId].map(player => (
+                {groups[gameIdNum].map(player => (
                   <View key={player.player_id} style={styles.playerCard}>
                     <Text style={styles.playerName}>{player.player_name}</Text>
                     <Text style={styles.stat}>Distance: {player.distance}km</Text>
@@ -161,16 +179,19 @@ export default function GPSScreen() {
                 ))}
               </View>
             </View>
-          ))
+            );
+          })
         ) : (
           // -------- PLAYER TREND VIEW --------
-          Object.keys(byPlayer).map(playerId => (
+          Object.keys(groups).map(playerId => {
+            const playerIdNum = Number(playerId);
+            return (
             <View key={playerId} style={styles.gameCard}>
               <Text style={styles.gameTitle}>
-                {byPlayer[playerId][0].player_name}'s Trend
+                {groups[playerIdNum][0].player_name}'s Trend
               </Text>
 
-              {byPlayer[playerId].map(game => (
+              {groups[playerIdNum].map(game => (
                 <View key={game.game_id} style={styles.playerCard}>
                   <Text style={styles.playerName}>
                     Game {game.game_id} – {game.game_name}
@@ -183,7 +204,8 @@ export default function GPSScreen() {
                 </View>
               ))}
             </View>
-          ))
+            );
+          })
         )}
       </ScrollView>
     </View>

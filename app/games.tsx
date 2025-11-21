@@ -8,7 +8,7 @@ import { Avatar, Button, Checkbox, List, SegmentedButtons } from 'react-native-p
 type Games = 'All' | 'conference' | 'none conference' | 'home' | 'away';
 
 interface Team {
-  id: string;
+  id: number;
   name: string;
   home_or_away?: string;
   conference?: string;
@@ -16,26 +16,26 @@ interface Team {
 }
 
 const SAMPLE_TEAMS: Team[] = [
-  {id: '1', name: 'Howard' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FHoward.png&width=84&height=84&quality=100&type=webp"},
-  {id: '2', name: 'Georgia State' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FPANTHERHEAD_LOGO_NEW.png&width=84&height=84&quality=100&type=webp"},
-  {id: '3', name: 'Queens' , home_or_away: 'away', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FQueensUpdated2023.png&width=84&height=84&quality=100&type=webp"},
-  {id: '4', name: 'Bellamine' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FBellarmine_site_logo.png&width=84&height=84&quality=100&type=webp"},
-  {id: '5', name: 'Wafford' , home_or_away: 'away', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2Fwofford_logo_200px.png&width=84&height=84&quality=100&type=webp"},
-  {id: '6', name: 'ETSU' , home_or_away: 'away', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FEast-Tenn-State.png&width=84&height=84&quality=100&type=webp"},
-  {id: '7', name: 'Upstate' , home_or_away: 'away', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FUSC_Upstate_logo.png&width=84&height=84&quality=100&type=webp"},
-  {id: '8', name: 'California' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2Fcal_logo.png&width=84&height=84&quality=100&type=webp"},
-  {id: '9', name: 'Radford' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FRadford.png&width=84&height=84&quality=100&type=webp"},
-  {id: '10', name: 'Highpoint' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FHighpoint.png&width=84&height=84&quality=100&type=webp"},
-  {id: '11', name: 'Longwood' , home_or_away: 'away', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FLongwood-Lancers.png&width=84&height=84&quality=100&type=webp"},
-  {id: '12', name: 'Presbyterian' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FPresbyterian.png&width=84&height=84&quality=100&type=webp"},
-  {id: '13', name: 'furman' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FFurman.png&width=84&height=84&quality=100&type=webp"},
-  {id: '14', name: 'Winthrop' , home_or_away: 'away', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2Fwinthrop.png&width=84&height=84&quality=100&type=webp"},
-  {id: '15', name: 'Gardner-Webb' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FGW_Mascot_Full_rgb.png&width=84&height=84&quality=100&type=webp"},
+  {id: 1, name: 'Howard' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FHoward.png&width=84&height=84&quality=100&type=webp"},
+  {id: 2, name: 'Georgia State' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FPANTHERHEAD_LOGO_NEW.png&width=84&height=84&quality=100&type=webp"},
+  {id: 3, name: 'Queens' , home_or_away: 'away', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FQueensUpdated2023.png&width=84&height=84&quality=100&type=webp"},
+  {id: 4, name: 'Bellamine' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FBellarmine_site_logo.png&width=84&height=84&quality=100&type=webp"},
+  {id: 5, name: 'Wafford' , home_or_away: 'away', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2Fwofford_logo_200px.png&width=84&height=84&quality=100&type=webp"},
+  {id: 6, name: 'ETSU' , home_or_away: 'away', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FEast-Tenn-State.png&width=84&height=84&quality=100&type=webp"},
+  {id: 7, name: 'Upstate' , home_or_away: 'away', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FUSC_Upstate_logo.png&width=84&height=84&quality=100&type=webp"},
+  {id: 8, name: 'California' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2Fcal_logo.png&width=84&height=84&quality=100&type=webp"},
+  {id: 9, name: 'Radford' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FRadford.png&width=84&height=84&quality=100&type=webp"},
+  {id: 10, name: 'Highpoint' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FHighpoint.png&width=84&height=84&quality=100&type=webp"},
+  {id: 11, name: 'Longwood' , home_or_away: 'away', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FLongwood-Lancers.png&width=84&height=84&quality=100&type=webp"},
+  {id: 12, name: 'Presbyterian' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FPresbyterian.png&width=84&height=84&quality=100&type=webp"},
+  {id: 13, name: 'furman' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FFurman.png&width=84&height=84&quality=100&type=webp"},
+  {id: 14, name: 'Winthrop' , home_or_away: 'away', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2Fwinthrop.png&width=84&height=84&quality=100&type=webp"},
+  {id: 15, name: 'Gardner-Webb' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FGW_Mascot_Full_rgb.png&width=84&height=84&quality=100&type=webp"},
 ];
 
 export default function HomeScreen() {
   const [selectedGames, setSelectedGames] = React.useState<Games>('conference');
-  const [selectedTeams, setSelectedTeams] = React.useState<Set<string>>(new Set());
+  const [selectedTeams, setSelectedTeams] = React.useState<Set<number>>(new Set());
   
   // Use global context
   const { setSelectedTeams: setContextTeams } = useAppContext();
@@ -50,7 +50,7 @@ export default function HomeScreen() {
     router.push(route as any);
   };
 
-  const toggleTeam = (teamId: string) => {
+  const toggleTeam = (teamId: number) => {
     setSelectedTeams(prev => {
       const newSet = new Set(prev);
       if (newSet.has(teamId)) {

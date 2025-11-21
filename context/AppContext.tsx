@@ -16,18 +16,18 @@ interface Player {
 }
 
 interface AppData {
-  selectedTeams: Set<string>;
-  selectedPlayers: Set<string>;
+  selectedTeams: Set<number>;
+  selectedPlayers: Set<number>;
   // You can add more data here as needed
 }
 
 interface AppContextType {
   appData: AppData;
-  setSelectedTeams: (teams: Set<string>) => void;
-  setSelectedPlayers: (players: Set<string>) => void;
+  setSelectedTeams: (teams: Set<number>) => void;
+  setSelectedPlayers: (players: Set<number>) => void;
   // Helper methods
-  getSelectedTeamsArray: () => string[];
-  getSelectedPlayersArray: () => string[];
+  getSelectedTeamsArray: () => number[];
+  getSelectedPlayersArray: () => number[];
   // Reset method
   resetData: () => void;
 }
@@ -42,19 +42,19 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [appData, setAppData] = useState<AppData>(defaultData);
 
-  const setSelectedTeams = (teams: Set<string>) => {
+  const setSelectedTeams = (teams: Set<number>) => {
     setAppData(prev => ({ ...prev, selectedTeams: teams }));
   };
 
-  const setSelectedPlayers = (players: Set<string>) => {
+  const setSelectedPlayers = (players: Set<number>) => {
     setAppData(prev => ({ ...prev, selectedPlayers: players }));
   };
 
-  const getSelectedTeamsArray = () => {
+  const getSelectedTeamsArray = (): number[] => {
     return Array.from(appData.selectedTeams);
   };
 
-  const getSelectedPlayersArray = () => {
+  const getSelectedPlayersArray = (): number[] => {
     return Array.from(appData.selectedPlayers);
   };
 
