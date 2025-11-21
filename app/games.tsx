@@ -28,7 +28,7 @@ const SAMPLE_TEAMS: Team[] = [
   {id: '10', name: 'Highpoint' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FHighpoint.png&width=84&height=84&quality=100&type=webp"},
   {id: '11', name: 'Longwood' , home_or_away: 'away', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FLongwood-Lancers.png&width=84&height=84&quality=100&type=webp"},
   {id: '12', name: 'Presbyterian' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FPresbyterian.png&width=84&height=84&quality=100&type=webp"},
-  {id: '13', name: 'furman' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FFurman.png&width=84&height=84&quality=100&type=webp"},
+  {id: '13', name: 'furman' , home_or_away: 'home', conference: 'none conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FFurman.png&width=84&height=84&quality=100&type=webp"},
   {id: '14', name: 'Winthrop' , home_or_away: 'away', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2Fwinthrop.png&width=84&height=84&quality=100&type=webp"},
   {id: '15', name: 'Gardner-Webb' , home_or_away: 'home', conference: 'conference', img_url:"https://images.sidearmdev.com/crop?url=https%3A%2F%2Fdxbhsrqyrr690.cloudfront.net%2Fsidearm.nextgen.sites%2Funcash.sidearmsports.com%2Fimages%2Flogos%2FGW_Mascot_Full_rgb.png&width=84&height=84&quality=100&type=webp"},
 ];
@@ -45,9 +45,6 @@ export default function HomeScreen() {
   useEffect(() => {
     setContextTeams(selectedTeams);
   }, [selectedTeams, setContextTeams]);
-
-  console.log('Selected Games:', selectedGames);
-  console.log('Selected Teams:', Array.from(selectedTeams));
 
   const handleNavigation = (route: string) => {
     router.push(route as any);
