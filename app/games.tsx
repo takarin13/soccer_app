@@ -35,7 +35,7 @@ const SAMPLE_TEAMS: Team[] = [
 
 export default function HomeScreen() {
   const [selectedGames, setSelectedGames] = React.useState<Games>('conference');
-  const [selectedTeams, setSelectedTeams] = React.useState<Set<number>>(new Set());
+  const [selectedTeams, setSelectedTeams] = React.useState<Set<Team>>(new Set());
   
   // Use global context
   const { setSelectedTeams: setContextTeams } = useAppContext();
@@ -51,12 +51,18 @@ export default function HomeScreen() {
   };
 
   const toggleTeam = (teamId: number) => {
+    const team = SAMPLE_TEAMS.find(team => team.id === teamId);
+    if (!team) return; // Handle case where team is not found
+    
     setSelectedTeams(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(teamId)) {
-        newSet.delete(teamId);
+      // Find if this team is already in the set by comparing IDs
+      const existingTeam = Array.from(newSet).find(t => t.id === teamId);
+      
+      if (existingTeam) {
+        newSet.delete(existingTeam); // Remove if already selected
       } else {
-        newSet.add(teamId);
+        newSet.add(team); // Add if not selected
       }
       return newSet;
     });
@@ -118,7 +124,7 @@ export default function HomeScreen() {
             left={() => (
               <View style={styles.avatarWrapper}>
                 <Checkbox
-                  status={selectedTeams.has(Team.id) ? 'checked' : 'unchecked'}
+                  status={Array.from(selectedTeams).some(t => t.id === Team.id) ? 'checked' : 'unchecked'}
                   onPress={() => toggleTeam(Team.id)}
                 />
                 <View style={styles.avatarContainer}>

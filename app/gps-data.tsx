@@ -18,7 +18,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzwP5Ac7fWHUvNIHGGidUrl
 
 export default function GPSScreen() {
   const [mode, setMode] = useState<"players" | "trend">("players");
-  const [gpsToDisplay, setGpsToDisplay] = useState<GpsStats[]>([]);
+  const [gpsToDisplay, setGpsToDisplay] = useState<Record<string, GpsStats[]>>({});
   const [groups, setGroups] = useState<Record<number, any[]>>({});
 
 
@@ -37,28 +37,32 @@ export default function GPSScreen() {
 
 const getGPSData = async () => {
 
-    // Step 1: Get all GPS data from Spreadsheet
-    const sheetName = 'GPS Data';
-    const response = await fetch(
-        `${API_URL}?sheet=${sheetName}`
-    );
-    const data: GpsStats[] = await response.json();
-    console.log(data);
-    console.log('selectedTeamsArray', selectedTeamsArray);
-    console.log('selectedPlayersArray', selectedPlayersArray);
-    
-    // step 2: filter the data to only include the selected teams and players
-    // const gpsData = data.filter(item =>
-    //     [7, 9].includes(item.game_id) &&
-    //     [37, 13].includes(item.player_id)
-    // );
+    // 1. Get the sheet names from the selected teams
+    const sheetNames = selectedTeamsArray.map(team => team.name);
+    console.log('sheetNames', sheetNames);
 
-    const gpsData = data.filter(item =>
-        selectedTeamsArray.includes(item.game_id) &&
-        selectedPlayersArray.includes(item.player_id)
-    );
+    // 2. Query all GPS data tabs together and create a dictionary:
+    const gpsDataBySheet: Record<string, GpsStats[]> = {};
     
-    setGpsToDisplay(gpsData);
+    await Promise.all(sheetNames.map(async (sheetName) => {
+        const response = await fetch(
+            `${API_URL}?sheet=${sheetName}`
+        );
+        const data: GpsStats[] = await response.json();
+        
+        // Filter data for this sheet based on selected teams and players
+        const gameIds = selectedTeamsArray.map(team => team.id);
+        const filteredData = data.filter(item => {
+            return gameIds.includes(item.game_id) &&
+                selectedPlayersArray.includes(item.player_id);
+        });
+        
+        // Store filtered data by sheet name
+        gpsDataBySheet[sheetName] = filteredData;
+    }));
+    
+    console.log('gpsDataBySheet', gpsDataBySheet);
+    setGpsToDisplay(gpsDataBySheet);
     // Groups will be recalculated by the useEffect when gpsToDisplay changes
 }
 
@@ -69,12 +73,14 @@ const getGPSData = async () => {
   
   // Recalculate groups when mode or gpsToDisplay changes
   useEffect(() => {
-    if (gpsToDisplay.length === 0) return;
+    // Flatten all GPS data from all sheets into a single array
+    const allGpsData = Object.values(gpsToDisplay).flat();
+    if (allGpsData.length === 0) return;
     
     if (mode === "players") {
-      byGame(gpsToDisplay);
+      byGame(allGpsData);
     } else {
-      byPlayer(gpsToDisplay);
+      byPlayer(allGpsData);
     }
   }, [mode, gpsToDisplay]);
 
@@ -134,6 +140,7 @@ const getGPSData = async () => {
 
   console.log('groups', groups);
   console.log('gpsToDisplay', gpsToDisplay);
+  console.log('groups', groups);
   return (
     <View style={styles.container}>
       <Text style={styles.header}>GPS Comparison</Text>
@@ -194,7 +201,7 @@ const getGPSData = async () => {
               {groups[playerIdNum].map(game => (
                 <View key={game.game_id} style={styles.playerCard}>
                   <Text style={styles.playerName}>
-                    Game {game.game_id} – {game.game_name}
+                    Game {game.game_id} – {game.game_name} {game.img_url}
                   </Text>
                   <Text style={styles.stat}>Distance: {game.distance}km</Text>
                   <Text style={styles.stat}>Sprint Dist: {game.sprint_distance}m</Text>
