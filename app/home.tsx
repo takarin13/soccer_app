@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import * as React from 'react';
 import { TextInput } from 'react-native-paper';
 
@@ -25,22 +25,22 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>UNCA Men's Soccer Analysis App</Text>
 
       <TextInput
-      style={styles.form}
-      label="Email"
-      value={email}
-      onChangeText={setEmail}
+        style={styles.form}
+        label="Email"
+        value={email}
+        onChangeText={setEmail}
       />
 
       <TextInput
-      style={styles.form}
-      label="Password"
-      secureTextEntry
-      value={password}
-      onChangeText={setPassword}
+        style={styles.form}
+        label="Password"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
       />
 
       <Pressable
@@ -52,45 +52,50 @@ export default function HomeScreen() {
       >
         <Text style={styles.buttonText}>Next</Text>
       </Pressable>
+
       {error !== "" && <Text style={styles.error}>{error}</Text>}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 60,
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
+    textAlign: "center",
     marginBottom: 40,
+    paddingHorizontal: 20,
+  },
+  form: {
+    width: "80%",
+    marginVertical: 12,
   },
   button: {
     backgroundColor: '#007AFF',
     paddingVertical: 15,
-    paddingHorizontal: 40,
     borderRadius: 10,
+    width: "80%",
+    alignItems: "center",
     marginTop: 20,
   },
-  form: {
-    marginVertical: 12,
+  buttonDisabled: {
+    backgroundColor: '#9BB9FF',
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
   },
-  buttonDisabled: {
-    backgroundColor: '#9BB9FF', // lighter color when not valid
-  },
   error: {
     color: 'red',
     marginTop: 12,
     fontSize: 16,
+    textAlign: "center",
   },
 });
-
-

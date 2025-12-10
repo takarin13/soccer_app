@@ -6,6 +6,7 @@ interface Team {
   home_or_away?: string;
   conference?: string;
   img_url?: string;
+  stats_url?: string;
 }
 
 interface Player {
